@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	copilotSDKVersion   = "1.0.9"
+	copilotSDKVersion   = "1.0.22"
 	copilotMinNodeMajor = 22
 	copilotMinNodeMinor = 13
 )
