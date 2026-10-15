@@ -121,6 +121,7 @@
   --tool-search=false \
   --port 53170</code></pre>
         </div>
+        <p><code>--subagent-model</code> forces every subagent onto one model through <code>CLAUDE_CODE_SUBAGENT_MODEL</code>. Pass <code>--subagent-model none</code> to leave it unset, so each agent uses its own <code>haiku</code>, <code>sonnet</code>, <code>opus</code>, or <code>inherit</code> choice through the dialect's tier mapping, as plain Claude Code does. Set all three tiers explicitly when you do; a tier left at <code>auto</code> on a Copilot preset lets Copilot pick any model.</p>
         <p>For an Anthropic-compatible service, route the upstream through the dialect's isolated embedded proxy:</p>
         <div class="code-block">
           <div class="code-block__header">

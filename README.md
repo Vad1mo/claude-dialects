@@ -841,6 +841,14 @@ cc-dialect create cc-my-codex \
   --port 53170
 ```
 
+`--subagent-model` sets `CLAUDE_CODE_SUBAGENT_MODEL`, which forces every
+subagent onto that one model. Pass `--subagent-model none` to leave it unset:
+each agent then uses its own `model` (`haiku`, `sonnet`, `opus`, or `inherit`),
+resolved through the dialect's `--opus-model`, `--sonnet-model`, and
+`--haiku-model` mapping, the same way plain Claude Code chooses. With `none`,
+set all three tiers explicitly; a tier left at `auto` on a Copilot preset lets
+Copilot pick any model for it.
+
 For an Anthropic-compatible service such as Z.ai, route the upstream through
 the dialect's isolated embedded proxy:
 

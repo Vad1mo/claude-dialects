@@ -815,7 +815,7 @@ usage-statistics-enabled: false
     models:
 `, token, dialect.BaseURL)
 		seen := map[string]bool{}
-		for _, model := range []string{dialect.Model, dialect.OpusModel, dialect.SonnetModel, dialect.HaikuModel, dialect.SubagentModel} {
+		for _, model := range []string{dialect.Model, dialect.OpusModel, dialect.SonnetModel, dialect.HaikuModel, routedSubagentModel(dialect)} {
 			if model != "" && !seen[model] {
 				content += fmt.Sprintf("      - name: %q\n        alias: %q\n", model, model)
 				seen[model] = true
@@ -1065,7 +1065,7 @@ func expectedAuthProviders(dialect Dialect) []string {
 	}
 	seen := map[string]bool{}
 	var providers []string
-	for _, model := range []string{dialect.Model, dialect.SubagentModel, dialect.OpusModel, dialect.SonnetModel, dialect.HaikuModel} {
+	for _, model := range []string{dialect.Model, routedSubagentModel(dialect), dialect.OpusModel, dialect.SonnetModel, dialect.HaikuModel} {
 		if provider := providerForModel(model); provider != "" && !seen[provider] {
 			seen[provider] = true
 			providers = append(providers, provider)
@@ -1117,10 +1117,22 @@ func providerForDialect(dialect Dialect) string {
 	}
 }
 
+// subagentModelNone leaves CLAUDE_CODE_SUBAGENT_MODEL unset, so each agent's own
+// model (haiku, sonnet, opus or inherit) resolves through the dialect's slots as
+// it would in plain Claude Code instead of every subagent being forced onto one.
+const subagentModelNone = "none"
+
+func routedSubagentModel(dialect Dialect) string {
+	if dialect.SubagentModel == subagentModelNone {
+		return ""
+	}
+	return dialect.SubagentModel
+}
+
 func dialectModels(dialect Dialect) []string {
 	seen := map[string]bool{}
 	var models []string
-	for _, model := range []string{dialect.Model, dialect.OpusModel, dialect.SonnetModel, dialect.HaikuModel, dialect.SubagentModel} {
+	for _, model := range []string{dialect.Model, dialect.OpusModel, dialect.SonnetModel, dialect.HaikuModel, routedSubagentModel(dialect)} {
 		if model != "" && !seen[model] {
 			seen[model] = true
 			models = append(models, model)
